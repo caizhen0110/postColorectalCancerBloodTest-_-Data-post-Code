@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title> get FHIR resource</title>
+ 	<script src="setting.js"></script>
+    <script src="HTTP2019.js"></script>
+    <style type="text/css">
+      #TextArea1 {
+            height: 666px;
+            width: 800px;
+        } 
+    </style>
+</head>
+<body style="height: 780px">
+1. Root URL :  <input type="text" id="rootURLText" size="80">  <br> <br> 
+2. select resource :
+	<select id="resource">
+        <option>Patient</option>
+        <option>Person</option>	
+        <option>Device</option>		
+		<option>Organization</option>	
+		<option>DiagnosticReport</option>
+        <option>Condition</option>			
+        <option>Observation</option>	
+        <option>Encounter</option>
+        <option>Media</option>
+        <option>Practitioner</option>		
+        <option>PractitionerRole</option>	
+        <option>List</option>
+        <option>Location</option>	
+        <option>Schedule</option>	
+        <option>Slot</option>
+        <option>ServiceRequest</option>		
+	</select>
+    &nbsp;&nbsp;&nbsp;
+    and if nessary, add FHIR search parameters:  <input type="text" id="searchP" size="76">  <br> <br> 
+    <input id="Button1" onclick="createFullURL()"  type="button" value="3. create full URL" />&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="text" id="fullURL" size="140">  <br><br><br>
+    <input id="Button2" onclick="getData()"  type="button" value="4. get data" /><br<br>
+    <p>
+        <textarea id="TextArea1" ></textarea> 
+    </p>
+
+    
+     
+     
+  
+</body>
+
+<script>
+    document.getElementById("rootURLText").value = FHIRrootURL;
+    function createFullURL() {
+        var rootURL = document.getElementById("rootURLText").value;  
+        var resourceID = document.getElementById("resource"); 
+        var selected = resourceID.options[resource.selectedIndex].text;
+        var apiURL;
+        apiURL =FHIRrootURL + '/'  + selected; 
+        var searchP = document.getElementById("searchP").value;
+        if(searchP !='')   apiURL = apiURL +'?' + searchP;
+        document.getElementById("fullURL").value =apiURL;
+    }
+    function getData() {
+        var dataString = document.getElementById("fullURL").value;
+        var apiURL;
+        apiURL =document.getElementById("fullURL").value; 
+        //alert(dataString);
+         HTTPGetData(apiURL); 
+       // + '/' + IdValue;
+        }
+     var myObj; 
+    function  callBack(ret)
+        {  document.getElementById("TextArea1").value = ret;
+           
+           myObj= JSON.parse(ret); 
+           var strData, 
+           strData ="";
+           for (i = 0; i <myObj.entry.length; i++)
+                       { 
+                        var resourceData;
+                        resourceData = myObj.entry[i].resource;
+                       // alert(resourceData.resourceType );
+                        // if   resourceType 是  patient 且  patient.name[0].text != null
+                        //if(resourceData.name)           if(resourceData.name[0].text)
+                        alert(resourceData.name[0].text);
+                         //  if(resourceData.id != null)
+                                          
+                        }
+           // alert(strData);
+           
+        }	
+    </script>	
+
+</html>

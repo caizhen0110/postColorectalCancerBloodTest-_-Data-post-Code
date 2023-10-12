@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title> Post FHIR Resource</title>
+	<script src="setting.js"></script>
+    <script src="HTTP2024.js"></script>
+    <style type="text/css">
+        body{width:1024px;font-size:17px;}
+        #Title{margin:5px auto;padding:15px 25px;width:90%;border-left:10px solid #ff6a00;font-size:27px;font-weight:bold;}
+        .Step{margin:10px auto;width:93%;}
+        .Title{margin:5px auto;width:95%;font-size:21px;font-weight:bold;}
+        .Content{margin:10px auto;width:86%;font-size:17px;}
+        input[type=text]{padding:10px;width:85%;font-size:17px;}
+        input[type=button]{margin:10px auto;padding:10px 0;width:17%;font-size:15px;}
+        select{margin:10px;padding:10px;font-size:17px;}
+        #Step2 input{width:23%;}
+        #Step2 a{margin:0 10px;}
+        #Step3 input[type=text]{margin:10px;width:77%;}
+        textarea{padding:13px;width:95%;min-height:200px;font-size:17px;}
+    </style>
+</head>
+<body>
+    <div id="Title">Post FHIR Resource</div>
+    <div id="Step1" class="Step">
+        <div class="Title">Step 1.</div>
+        <div class="Content">
+            Root URL :  <input type="text" id="rootURLText">
+            Select Resource :  <select id="resource">
+                <option>Patient</option>
+                <option>Person</option>
+                <option>Device</option>
+                <option>Organization</option>
+                <option>DiagnosticReport</option>
+                <option>Condition</option>
+                <option>Observation</option>
+                <option>Encounter</option>
+                <option>Media</option>
+                <option>Practitioner</option>
+                <option>PractitionerRole</option>
+                <option>Appointment</option>
+                <option>Location</option>
+                <option>Schedule</option>
+                <option>Slot</option>
+                <option>ServiceRequest</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="Step2" class="Step">
+        <div class="Title">Step 2.<a href="https://hackmd.io/lpYGm11LT9me4c08HFiU-w?view" target="_blank">參考範例</a></div>
+        <div class="Content">
+            <textarea id="TextArea1">Paste FHIR Resource </textarea>
+        </div>
+    </div>
+    <div id="Step3" class="Step">
+        <div class="Title">Step 3.</div>
+        <div class="Content">
+            <input id="Button1" onclick="postData()" type="button" value="Post Data" />
+        </div>
+    </div>
+    <div id="Step4" class="Step">
+        <div class="Title">Step 4.</div>
+        <div class="Content">
+            <textarea id="TextArea2">Keep resource ID,  if required. </textarea>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("rootURLText").value = FHIRrootURL;
+        function postData() {
+            var rootURL = document.getElementById("rootURLText").value;
+            var dataString = document.getElementById("TextArea1").value;
+            var resourceID = document.getElementById("resource");
+            var selected = resourceID.options[resource.selectedIndex].text;
+            var apiURL;
+            apiURL = rootURL + selected;
+           // HTTPPostData(apiURL, dataString);
+            sendHttpPost(apiURL, dataString, callBack);
+        }
+        function callBack(ret) {
+            document.getElementById("TextArea2").value = ret;
+        }
+    </script>
+</body>
+
+</html>

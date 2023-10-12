@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>大腸癌之CEA檢測_紀錄</title>
+
+    <script src="setting.js"></script>
+    <script src="Cookie.js"></script>
+    <script src="dateTime.js"></script>
+    <script src="HTTP2024.js"></script>
+
+    <script>
+        var jsonObj = {
+            "resourceType": "Observation",
+            "status": "final",
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://loinc.org",
+                        "code": "13955-0",
+                        "display": "Carcinoembryonic Antigen [Mass/volume] in Serum or Plasma"
+                    }
+                ],
+                "text": "CEA Test"
+            },
+            "subject": {
+                "reference": "Patient/23855070"
+            },
+            "effectiveDateTime": "2023-10-15T08:30:00+00:00",
+            "valueQuantity": {
+                "value": 5.2,
+                "unit": "ng/mL",
+                "system": "http://unitsofmeasure.org",
+                "code": "ng/mL"
+            }
+        }
+            ;
+
+        function postData() {
+            jsonObj.subject.reference="Patient/"+parseInt(document.getElementById("patientID").value);
+            jsonObj.valueQuantity.value = parseFloat(document.getElementById("CEA").value);
+            jsonObj.effectiveDateTime = getFormattedTime();
+            var jsonStr = JSON.stringify(jsonObj);
+            //alert(jsonStr);
+            var apiURL;
+            apiURL = FHIRrootURL + "Observation";
+            // HTTPPostData( apiURL,jsonStr);
+            sendHttpPost(apiURL, jsonStr, callBack);
+        }
+        function callBack(ret) {
+            console.log(ret);
+            //alert(ret);
+        }
+
+
+    </script>
+
+</head>
+
+<body style="height: 780px">
+
+    <input id="Button1" onclick="postData()" type="button" value="postData" /><br />
+
+    <p>請輸入病患id</p> 
+    
+    病患id: <input type="text" id="patientID" /> <br />
+
+    <p>請輸入大腸癌之血液CEA檢測值</p>
+
+    CEA檢測值: <input type="text" id="CEA" /> <br />
+
+</body>
+
+</html>
